@@ -51,6 +51,8 @@ public class QuickElevatorFetchStrategy extends ElevatorFetchingStrategy{
         repository.save(updatedElevatorPosition);
         ElevatorStop stop = getElevatorStop(selected, userRequest.getToFloor());
         elevatorStopRepository.save(stop);
+        ElevatorStop fromStop = getFromElevatorStop(selected,userRequest.getFromFloor());
+        elevatorStopRepository.save(fromStop);
         return elevatorName;
     }
 
@@ -64,5 +66,17 @@ public class QuickElevatorFetchStrategy extends ElevatorFetchingStrategy{
                 .stopStatus(StopStatus.NOT_COMPLETED)
                 .build();
     }
+
+    public ElevatorStop getFromElevatorStop(ElevatorPosition position,int fromFloor){
+        return ElevatorStop.builder()
+                .elevatorFloorCompKey(ElevatorFloorCompKey.builder()
+                        .elevatorId(position.getElevatorCompKey().getElevatorId())
+                        .elevatorSystemId(position.getElevatorCompKey().getElevatorSystemId())
+                        .floorNumber(fromFloor)
+                        .build())
+                .stopStatus(StopStatus.NOT_COMPLETED)
+                .build();
+    }
+
 
 }
