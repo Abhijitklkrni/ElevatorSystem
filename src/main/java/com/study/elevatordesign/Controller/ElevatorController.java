@@ -22,4 +22,8 @@ public class ElevatorController {
         return service.createElevator(elevator);
 
     }
+
+    public void create(){
+        System.out.println("HI UMESH");
+    }
 }
