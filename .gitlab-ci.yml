@@ -1,0 +1,113 @@
+variables:
+  BRAND: "defaultBrand"
+  SERVICE: "defaultService"
+  ARTIFACT_URL: "defaultArtifactUrl"
+  BACKUP_ARTIFACT_URL: "defaultBackupArtifactUrl"
+
+stages:
+  - backup
+  - deploy-prd-b
+  - transfer-traffic-5
+  - transfer-traffic-30
+  - transfer-traffic-100
+  - deploy-prd
+  - transfer-back-5
+  - transfer-back-30
+  - transfer-back-100
+  - revert-changes
+
+backup:
+  stage: backup
+  script:
+    - ./backup.sh
+  when: manual
+
+deploy-prd-b:
+  stage: deploy-prd-b
+  script:
+    - echo "Deploying new artifact from ${ARTIFACT_URL} to prd-b with brand ${BRAND} and service ${SERVICE}"
+    - # Add your deployment script/commands here
+  when: manual
+  needs: ["backup"]
+
+transfer-traffic-5:
+  stage: transfer-traffic-5
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "5" # Default value
+
+transfer-traffic-30:
+  stage: transfer-traffic-30
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "30" # Default value
+
+transfer-traffic-100:
+  stage: transfer-traffic-100
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "100" # Default value
+
+deploy-prd:
+  stage: deploy-prd
+  script:
+    - echo "Deploying new artifact from ${ARTIFACT_URL} to prd with brand ${BRAND} and service ${SERVICE}"
+    - # Add your deployment script/commands here
+  when: manual
+  needs: ["backup"]
+
+transfer-back-5:
+  stage: transfer-back-5
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "5" # Default value
+
+transfer-back-30:
+  stage: transfer-back-30
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "30" # Default value
+
+transfer-back-100:
+  stage: transfer-back-100
+  script:
+    - ./transfer_traffic.sh ${TRANSFER_TRAFFIC} "Hi I am abhijit"
+  when: manual
+  needs: ["backup"]
+  variables:
+    TRANSFER_TRAFFIC:
+      description: "Additional variable with spaces"
+      value: "100" # Default value
+
+revert-changes:
+  stage: revert-changes
+  script:
+    - echo "Reverting changes"
+    - # Add your revert script/commands here
+  when: manual
+  needs: ["backup"]
